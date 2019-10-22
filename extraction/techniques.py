@@ -1,5 +1,5 @@
 "This file contains techniques for extracting data from HTML pages."
-import bs4
+from bs4 import BeautifulSoup
 
 
 def init_bs(html):
@@ -14,7 +14,7 @@ class Technique(object):
         """
         self.extractor = extractor
         super(Technique, self).__init__(*args, **kwargs)
-    
+
     def extract(self, html):
         "Extract data from a string representing an HTML document."
         return {'titles': [],
@@ -144,7 +144,7 @@ class HTML5SemanticTags(Technique):
     The HTML5 `article` tag, and also the `video` tag give us some useful
     hints for extracting page information for the sites which happen to
     utilize these tags.
-    
+
     This technique will extract information from pages formed like::
 
         <html>
@@ -166,7 +166,7 @@ class HTML5SemanticTags(Technique):
     of cases where it hits, and otherwise expects `SemanticTags` to run sweep
     behind it for the lower quality, more abundant hits it discovers.
     """
-    
+
     def extract(self, html):
         "Extract data from HTML5 semantic tags."
         titles = []
@@ -207,12 +207,12 @@ class SemanticTags(Technique):
                       ]
     # format is ("name of tag", "destination list", "name of attribute" store_first_n)
     extract_attr = [('img', 'images', 'src', 10)]
-    
+
     def extract(self, html):
         "Extract data from usual semantic tags."
         extracted = {}
         soup = init_bs(html)
-        
+
         for tag, dest, max_to_store in self.extract_string:
             for found in soup.find_all(tag)[:max_to_store] or []:
                 if dest not in extracted:
@@ -227,5 +227,3 @@ class SemanticTags(Technique):
                     extracted[dest].append(found[attribute])
 
         return extracted
-    
-    

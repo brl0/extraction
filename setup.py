@@ -9,10 +9,11 @@ setuptools.setup(
     url='http://pypi.python.org/pypi/extraction/',
     license='LICENSE.txt',
     description='Extract basic info from HTML webpages.',
-    long_description=open('README.rst').read(),
+    long_description=open('README.rst', 'r', encoding='utf-8').read(),
     install_requires=[
         "beautifulsoup4",
         "html5lib",
+        "lxml",
         ],
     classifiers=[
         "Programming Language :: Python :: 3",

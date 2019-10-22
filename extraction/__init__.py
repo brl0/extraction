@@ -8,7 +8,7 @@ Retrieve and extract data from HTML documents.
     >>> resp = extr.extract(html)
     >>> print resp
 """
-import urllib.parse
+from urllib.parse import urljoin, urlparse
 import importlib
 
 
@@ -220,11 +220,11 @@ class DictExtractor(object):
         source_url, then return the existing value. If the value_url is
         relative, and we know the source_url, then try to rewrite it.
         """
-        value = urllib.parse.urlparse(value_url)
+        value = urlparse(value_url)
         if value.netloc or not source_url:
             url = value_url
         else:
-            url = urllib.parse.urljoin(source_url, value_url)
+            url = urljoin(source_url, value_url)
         if url.startswith('//'):
             url = 'http:' + url # MissingSchema fix
         if mark:

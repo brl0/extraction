@@ -18,7 +18,7 @@ import importlib
 MARK_TECHNIQUE = False
 
 
-class Extracted(object):
+class Extracted():
     "Contains data extracted from a page."
 
     def __init__(self, titles=None, descriptions=None, images=None, videos=None, urls=None, feeds=None, **kwargs):
@@ -30,7 +30,7 @@ class Extracted(object):
 
             >>> print x.titles, x.urls, x.images
 
-        The lists should be helpful For situations where you have a editor
+        The lists should be helpful for situations where you have a editor
         or user who is picking through possible options. For situations where
         you're without a curation mechanism, you can always get the best option
         using associated non-plural properties::

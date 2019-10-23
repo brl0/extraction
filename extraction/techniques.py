@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 
 def init_bs(html):
-    return bs4.BeautifulSoup(html, features="html5lib")
+    return BeautifulSoup(html, features="lxml")
 
 
 class Technique(object):

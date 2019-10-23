@@ -9,7 +9,7 @@ Retrieve and extract data from HTML documents.
     >>> print resp
 """
 from urllib.parse import urljoin, urlparse
-import importlib
+from .techniques import *
 
 
 # This is a debugging mechanism, and if enabled will add a hash
@@ -166,11 +166,11 @@ class DictExtractor(object):
     of ``DictExtractor``.
     """
     techniques = [
-        "extraction.techniques.FacebookOpengraphTags",
-        "extraction.techniques.TwitterSummaryCardTags",
-        "extraction.techniques.HeadTags",
-        "extraction.techniques.HTML5SemanticTags",
-        "extraction.techniques.SemanticTags"
+        techniques.FacebookOpengraphTags,
+        techniques.TwitterSummaryCardTags,
+        techniques.HeadTags,
+        techniques.HTML5SemanticTags,
+        techniques.SemanticTags,
     ]
 
     # for determining which cleanup mechanisms to apply
@@ -189,20 +189,13 @@ class DictExtractor(object):
         """
         Run a given technique against the HTML.
 
-        Technique is a string including the full module path
-        and class name for the technique, for example::
+        For example::
 
             extraction.techniques.FacebookOpengraphTags
 
         HTML is a string representing an HTML document.
         """
-        technique_path_parts = technique.split('.')
-        assert len(technique_path_parts) > 1, "technique_path_parts must include a module and a class"
-        technique_module_path = ".".join(technique_path_parts[:-1])
-        technique_class_name = technique_path_parts[-1]
-        technique_module = importlib.import_module(technique_module_path)
-        technique_class = getattr(technique_module, technique_class_name)
-        technique_inst = technique_class(extractor=self)
+        technique_inst = technique(extractor=self)
         return technique_inst.extract(html)
 
     def cleanup_text(self, value, mark):
@@ -308,14 +301,3 @@ class Extractor(DictExtractor):
         "Extract contents from an HTML document."
         extract_dict = super(Extractor, self).extract(*args, **kwargs)
         return self.extracted_class(**extract_dict)
-
-
-class SvvenExtractor(DictExtractor):
-    "Example subclass for Svven news aggregator."
-    url_types = ["images", "urls"]
-    text_types = ["titles", "descriptions"]
-
-    def __init__(self, *args, **kwargs):
-        "Extractor which defaults to strict_types being true."
-        kwargs.setdefault('strict_types', True)
-        super(SvvenExtractor, self).__init__(*args, **kwargs)
